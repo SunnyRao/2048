@@ -8,6 +8,8 @@ import android.widget.GridLayout;
 
 public class GameView extends GridLayout {
 
+	private Card[][] cardsMap = new Card[4][4]; 
+	
 	public GameView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initView();
@@ -24,7 +26,9 @@ public class GameView extends GridLayout {
 	}
 
 	private void initView() {
-
+		setColumnCount(4);
+		setBackgroundColor(0xffbbada0);
+		
 		// 设置手指滑动的监听事件
 		setOnTouchListener(new View.OnTouchListener() {
 
@@ -40,7 +44,7 @@ public class GameView extends GridLayout {
 				case MotionEvent.ACTION_UP:
 					offsetX = event.getX() - startX;
 					offsetY = event.getY() - startY;
-
+					// 判断手指滑动的方向
 					if (Math.abs(offsetX) > Math.abs(offsetY)) {
 						if (offsetX < -5) {
 							swipeLeft();
@@ -61,6 +65,31 @@ public class GameView extends GridLayout {
 		});
 	}
 	
+	
+	
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		
+		int cardWidth = (Math.min(w, h) - 10) / 4;
+		
+		addCards(cardWidth, cardWidth);
+	}
+	
+	private void addCards(int cardWidth, int cardHeight) {
+		Card c ;
+		
+		for (int y = 0; y < 4; y++) {
+			for (int x = 0; x < 4; x++) {
+				c = new Card(getContext());
+				c.setNum(2);
+				addView(c, cardWidth, cardHeight);
+				
+				cardsMap[x][y] = c;
+			}
+		}
+	}
+
 	private void swipeLeft() {
 		
 	}
