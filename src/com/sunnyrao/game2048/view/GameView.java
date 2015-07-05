@@ -3,7 +3,11 @@ package com.sunnyrao.game2048.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sunnyrao.game2048.MainActivity;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -99,6 +103,8 @@ public class GameView extends GridLayout {
 	 * 开始游戏
 	 */
 	private void startGame() {
+		MainActivity.getMainActivity().clearScore();
+		
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
 				cardsMap[x][y].setNum(0);
@@ -130,6 +136,7 @@ public class GameView extends GridLayout {
 	}
 
 	private void swipeLeft() {
+		boolean merge = false;
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
 				for (int x1 = x + 1; x1 < 4; x1++) {
@@ -138,18 +145,28 @@ public class GameView extends GridLayout {
 							cardsMap[x][y].setNum(cardsMap[x1][y].getNum());
 							cardsMap[x1][y].setNum(0);
 							x--;
+							merge = true;
 						} else if (cardsMap[x][y].equals(cardsMap[x1][y])) {
 							cardsMap[x][y].setNum(cardsMap[x][y].getNum() * 2);
 							cardsMap[x1][y].setNum(0);
+							
+							MainActivity.getMainActivity().addScore(
+									cardsMap[x][y].getNum());
+							merge = true;
 						}
 						break;
 					}
 				}
 			}
 		}
+		if (merge) {
+			addRandomNum();
+			checkComplete();
+		}
 	}
 
 	private void swipeRight() {
+		boolean merge = false;
 		for (int y = 0; y < 4; y++) {
 			for (int x = 3; x >= 0; x--) {
 				for (int x1 = x - 1; x1 >= 0; x1--) {
@@ -158,18 +175,28 @@ public class GameView extends GridLayout {
 							cardsMap[x][y].setNum(cardsMap[x1][y].getNum());
 							cardsMap[x1][y].setNum(0);
 							x++;
+							merge = true;
 						} else if (cardsMap[x][y].equals(cardsMap[x1][y])) {
 							cardsMap[x][y].setNum(cardsMap[x][y].getNum() * 2);
 							cardsMap[x1][y].setNum(0);
+							
+							MainActivity.getMainActivity().addScore(
+									cardsMap[x][y].getNum());
+							merge = true;
 						}
 						break;
 					}
 				}
 			}
 		}
+		if (merge) {
+			addRandomNum();
+			checkComplete();
+		}
 	}
 
 	private void swipeUp() {
+		boolean merge = false;
 		for (int x = 0; x < 4; x++) {
 			for (int y = 0; y < 4; y++) {
 				for (int y1 = y + 1; y1 < 4; y1++) {
@@ -178,18 +205,28 @@ public class GameView extends GridLayout {
 							cardsMap[x][y].setNum(cardsMap[x][y1].getNum());
 							cardsMap[x][y1].setNum(0);
 							y--;
+							merge = true;
 						} else if (cardsMap[x][y].equals(cardsMap[x][y1])) {
 							cardsMap[x][y].setNum(cardsMap[x][y].getNum() * 2);
 							cardsMap[x][y1].setNum(0);
+							
+							MainActivity.getMainActivity().addScore(
+									cardsMap[x][y].getNum());
+							merge = true;
 						}
 						break;
 					}
 				}
 			}
 		}
+		if (merge) {
+			addRandomNum();
+			checkComplete();
+		}
 	}
 
 	private void swipeDown() {
+		boolean merge = false;
 		for (int x = 0; x < 4; x++) {
 			for (int y = 3; y >= 0; y--) {
 				for (int y1 = y - 1; y1 >= 0; y1--) {
@@ -198,14 +235,55 @@ public class GameView extends GridLayout {
 							cardsMap[x][y].setNum(cardsMap[x][y1].getNum());
 							cardsMap[x][y1].setNum(0);
 							y++;
+							merge = true;
 						} else if (cardsMap[x][y].equals(cardsMap[x][y1])) {
 							cardsMap[x][y].setNum(cardsMap[x][y].getNum() * 2);
 							cardsMap[x][y1].setNum(0);
+							
+							MainActivity.getMainActivity().addScore(
+									cardsMap[x][y].getNum());
+							merge = true;
 						}
 						break;
 					}
 				}
 			}
+		}
+		if (merge) {
+			addRandomNum();
+			checkComplete();
+		}
+	}
+
+	/*
+	 * 判断游戏是否结束
+	 */
+	private void checkComplete() {
+		boolean complete = true;
+		All: for (int y = 0; y < 4; y++) {
+			for (int x = 0; x < 4; x++) {
+				if (cardsMap[x][y].getNum() == 0
+						|| (x > 0 && cardsMap[x][y].equals(cardsMap[x - 1][y]))
+						|| (x < 3 && cardsMap[x][y].equals(cardsMap[x + 1][y]))
+						|| (y > 0 && cardsMap[x][y].equals(cardsMap[x][y - 1]))
+						|| (y < 3 && cardsMap[x][y].equals(cardsMap[x][y + 1]))) {
+					complete = false;
+					break All;
+				}
+			}
+		}
+
+		if (complete) {
+			new AlertDialog.Builder(getContext())
+					.setTitle("Game Over")
+					.setPositiveButton("Play again",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									startGame();
+								}
+							}).show();
 		}
 	}
 }
