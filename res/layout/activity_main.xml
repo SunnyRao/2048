@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -7,24 +8,63 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg"
         android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/score" />
+            android:text="@string/score"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
             android:id="@+id/tvScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/bestscore"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/tvBestScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </LinearLayout>
 
-    <com.sunnyrao.game2048.view.GameView
-        android:id="@+id/gameView"
+    <Button
+        android:id="@+id/btnNewGame"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg"
+        android:text="@string/newgame" />
+
+    <FrameLayout
+        android:id="@+id/gameContainer"
+        android:layout_width="match_parent"
+        android:background="@drawable/bg"
         android:layout_height="0dp"
         android:layout_weight="1" >
-    </com.sunnyrao.game2048.view.GameView>
+
+        <com.sunnyrao.game2048.view.GameView
+            android:id="@+id/gameView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </com.sunnyrao.game2048.view.GameView>
+
+        <com.sunnyrao.game2048.view.AnimLayer
+            android:id="@+id/animLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </com.sunnyrao.game2048.view.AnimLayer>
+    </FrameLayout>
 
 </LinearLayout>

@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">2048</string>
-    <string name="score">Score</string>
-    
+    <string name="score">Score:</string>
+    <string name="bestscore">Best:</string>
+    <string name="newgame">New Game</string>
 </resources>
