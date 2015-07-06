@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 
 public class GameView extends LinearLayout {
 
-	private Card[][] cardsMap = new Card[4][4];
+	private Card[][] cardsMap = new Card[Config.LINES][Config.LINES];
 	private List<Point> emptyPoints = new ArrayList<Point>();
 
 	public GameView(Context context, AttributeSet attrs, int defStyle) {
